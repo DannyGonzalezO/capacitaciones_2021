@@ -16,7 +16,7 @@ import cv2
 # Se leen los argumentos de entrada
 parser = argparse.ArgumentParser()
 parser.add_argument('--env-name', default="Duckietown-udem1-v1")
-parser.add_argument('--map-name', default='udem1')
+parser.add_argument('--map-name', default='mapaDGonzalez')
 parser.add_argument('--distortion', default=False, action='store_true')
 parser.add_argument('--draw-curve', action='store_true', help='draw the lane following curve')
 parser.add_argument('--draw-bbox', action='store_true', help='draw collision detection bounding boxes')
@@ -42,7 +42,7 @@ else:
 # Se reinicia el environment
 env.reset()
 
-
+old_key=-1
 while True:
 
     # Captura la tecla que está siendo apretada y almacena su valor en key
@@ -62,18 +62,38 @@ while True:
     # Esto es avanzar recto hacia adelante al apretar la tecla w
     if key == ord('w'):
         action += np.array([0.5, 0.0])
-
+#giro izquierda
     if key == ord('a'):
         action += np.array([0, 1.0])
-
+#giro derecha
     if key == ord('d'):
         action += np.array([0, -1.0])
-
+#retroceder
     if key == ord('s'):
         action += np.array([-0.5, 0.0])
+#diagonal adelante izquierda:
+    if key == ord('q'):
+        action += np.array([0.5, 1.0])
+#diagonal adelant derecha:
+    if key == ord('e'):
+        action += np.array([0.5, -1.0])
+#turbo adelante (mas rapido)
+    if key == ord('p'):
+        action += np.array([1.5, 0.0])
+
+# borrador, no aplica nada todavía        
+##    if action[0]>(0):
+##        if old_key==ord('w') and key == (-1):
+##            action += np.array([0.5, 0.0])
+##        if old_key==(-1):
+##            action += action - np.array([0.05, 0.0])
+##
+####    if action[0]<(0.5):
+####            action += action + np.array([+0.08, 0.0])
+                
 
     ### AGREGAR MÁS COMPORTAMIENTOS ###
-
+    old_key = key
 
 
     # Se ejecuta la acción definida anteriormente y se retorna la observación (obs),
@@ -88,7 +108,7 @@ while True:
         env.reset()
 
     # Se muestra en una ventana llamada "patos" la observación del simulador
-    cv2.imshow("patos", cv2.cvtColor(obs, cv2.COLOR_RGB2BGR))
+    cv2.imshow("MCF", cv2.cvtColor(obs, cv2.COLOR_RGB2BGR))
 
 
 # Se cierra el environment y termina el programa
