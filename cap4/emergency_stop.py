@@ -127,7 +127,8 @@ if __name__ == '__main__':
     duck_pos = np.array([2,0,2])
 
     # Constante que se debe calcular
-    C = 875*0.08 # f * hr (f es constante, hr es conocido) (no corresponde a lo medido experimentalmente, pero a distancias cortas funciona bien)
+##    C = 875*0.08 # f * hr (f es constante, hr es conocido) (a distancias cortas funcionaba bien, pero cuando está bajo los dos centimetros, estima una distancia mayor a la real, por lo que se descarta)
+    C = 750*0.08 # corresponde a lo obtenido experimentalente, funciona bien a distancias cercanas a 1 metro, pero mientras está cerca tiene un error de aprox 2-4 cm, aunque suele estimar una distancia menor, por lo que no sería tan peligroso)
 
     while True:
 
@@ -141,9 +142,15 @@ if __name__ == '__main__':
         action = mov_duckiebot(key)
 
         # Si hay alerta evitar que el Duckiebot avance (lo frena o retrocede)
+        #este le disminuye la velocidad, pero sigue avanzando
+##        if alert:
+##            if key == ord('w'):
+##                action = np.array([0.1, 0.0])
+##            pass
+        #este si lo frena
         if alert:
             if key == ord('w'):
-                action = np.array([0.1, 0.0])
+                action = np.array([0.0, 0.0])
             pass
 
         # Se ejecuta la acción definida anteriormente y se retorna la observación (obs),
